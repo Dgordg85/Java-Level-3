@@ -3,7 +3,7 @@ package Lesson_02;
 public class Main {
 
     public static void main(String[] args) {
-        Crude students = new Crude();
+        Crude students = new Crude("students");
         students.insert("Аркадий", 25);
         students.insert("Семен", 4);
         students.insert("Артем", 28);

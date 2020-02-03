@@ -17,6 +17,17 @@ public class Crude {
         }
     }
 
+    public Crude(String tableName) {
+        try {
+            connect();
+            this.tableName = tableName;
+            createTableIfNotExists(connection);
+            delete();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void select(){
         try {
             pstmt = connection.prepareStatement(String.format("SELECT * FROM %s", tableName));
