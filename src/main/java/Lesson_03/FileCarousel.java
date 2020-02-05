@@ -81,7 +81,7 @@ public class FileCarousel {
         FileOutputStream fos = null;
 
         try {
-            fos = new FileOutputStream(new File(path + "task2-output.txt"),true);
+            fos = new FileOutputStream(new File(path + "task2-output.txt"));
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
