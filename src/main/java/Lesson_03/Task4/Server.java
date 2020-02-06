@@ -8,6 +8,9 @@ public class Server {
     public Server() {
         Socket socket = null;
         ServerSocket server = null;
+        DataInputStream in = null;
+        ByteArrayOutputStream baos = null;
+        Human humanCopy = null;
         final byte[] buf = new byte[16384];
         int numRead;
 
@@ -18,21 +21,20 @@ public class Server {
             socket = server.accept();
             System.out.println("Клиент подключился");
 
-            DataInputStream in = new DataInputStream(socket.getInputStream());
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            in = new DataInputStream(socket.getInputStream());
+            baos = new ByteArrayOutputStream();
 
             while ((numRead = in.read(buf, 0, buf.length)) != -1) {
                baos.write(buf, 0, numRead);
             }
 
-            final byte[] allBytes = baos.toByteArray();
-
             try {
-                Human anatoliyCopy = (Human)convertFromBytes(allBytes);
-                anatoliyCopy.getInfo();
+                humanCopy = (Human)convertFromBytes(baos.toByteArray());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+
+            humanCopy.getInfo();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,6 +48,17 @@ public class Server {
             try {
                 server.close();
             } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                in.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            try {
+                baos.close();
+            }catch (IOException e){
                 e.printStackTrace();
             }
         }
