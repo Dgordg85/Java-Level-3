@@ -3,7 +3,7 @@ package Lesson_03.Task4;
 import java.io.*;
 import java.net.Socket;
 
-public class Client implements Serializable {
+public class Client {
     private final String SERVER_ADDR = "localhost";
     private final int SERVER_PORT = 15000;
 
@@ -15,19 +15,12 @@ public class Client implements Serializable {
         Human larisa = new Human("Лариса", "Абрамова", 22);
         anatoliy.setFriend(larisa);
 
-        OutputStream stream = new OutputStream() {
-            @Override
-            public void write(int b) throws IOException {
-                
-            }
-        }
-        ObjectOutputStream oos = new ObjectOutputStream()
-        anatoliy.
+
         Client client = new Client();
-
-
-        client.out.writeUTF("BRHR");
+        byte[] anatoliyBytes = client.convertToBytes(anatoliy);
+        client.out.write(anatoliyBytes);
         client.closeConnection();
+
     }
 
     public Client() {
@@ -56,5 +49,12 @@ public class Client implements Serializable {
         }
     }
 
+    private byte[] convertToBytes(Object object) throws IOException {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutput out = new ObjectOutputStream(bos)) {
+            out.writeObject(object);
+            return bos.toByteArray();
+        }
+    }
 
 }
