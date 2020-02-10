@@ -1,8 +1,8 @@
 package Lesson_04;
 
 public class MFU {
-    private volatile boolean isScanning = false;
-    private volatile boolean isPrinting = false;
+    private static volatile Boolean isScanning = false;
+    private static volatile Boolean isPrinting = false;
 
     public static void main(String[] args) {
         MFU mfu = new MFU();
@@ -14,28 +14,30 @@ public class MFU {
         }
     }
 
-    private synchronized void print(){
+    private void print(){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Хочу распечатать...");
-                while (isPrinting){
+                synchronized (isPrinting) {
+                    System.out.println("Хочу распечатать...");
+                    while (isPrinting) {
+                        try {
+                            System.out.println("Принтер занят жду...");
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     try {
-                        System.out.println("Принтер занят жду...");
-                        wait();
+                        isPrinting = true;
+                        System.out.println("Печатаю");
+                        Thread.sleep(1500);
+                        System.out.println("Распечатал");
+                        isPrinting = false;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
-
-                try {
-                    isPrinting = true;
-                    System.out.println("Печатаю");
-                    Thread.sleep(1500);
-                    System.out.println("Распечатал");
-                    isPrinting = false;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
                 notifyAll();
             }
@@ -46,24 +48,25 @@ public class MFU {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Хочу просканировать...");
-                while (isScanning){
+                synchronized (isScanning) {
+                    System.out.println("Хочу просканировать...");
+                    while (isScanning) {
+                        try {
+                            System.out.println("Сканер занят жду...");
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     try {
-                        System.out.println("Сканер занят жду...");
-                        wait();
+                        isPrinting = true;
+                        System.out.println("Печатаю");
+                        Thread.sleep(1500);
+                        System.out.println("Распечатал");
+                        isPrinting = false;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
-                try {
-                    isScanning = true;
-                    System.out.println("Сканирую");
-                    Thread.sleep(2500);
-                    System.out.println("Отсканировал");
-                    isScanning = false;
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
                 notifyAll();
             }
