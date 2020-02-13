@@ -1,7 +1,6 @@
 package Lesson_05;
 
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 public class Tunnel extends Stage {
 
