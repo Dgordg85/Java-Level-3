@@ -23,14 +23,14 @@ public class MainClass {
         }
 
         try {
-            Car.getUnReadyCars().await();
+            race.getUnReadyCars().await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
 
         try {
-            Car.getNotFinishCars().await();
+            race.getNotFinishCars().await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
