@@ -1,7 +1,5 @@
 package Lesson_05;
 
-import java.util.concurrent.CountDownLatch;
-
 public class Car implements Runnable {
     private static int CARS_COUNT;
 

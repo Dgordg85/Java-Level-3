@@ -4,15 +4,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class Tunnel extends Stage {
 
-    private static ArrayBlockingQueue<Car> tunnel;
-
-    static {
-        tunnel = new ArrayBlockingQueue<>(MainClass.CARS_COUNT / 2);
-    }
+    private ArrayBlockingQueue<Car> bandwidth;
 
     public Tunnel() {
         this.length = 80;
         this.description = "Тоннель " + length + " метров";
+        bandwidth = new ArrayBlockingQueue<>(MainClass.CARS_COUNT / 2);
     }
 
     @Override
@@ -21,7 +18,7 @@ public class Tunnel extends Stage {
             try {
                 System.out.println(c.getName() + " готовится к этапу(ждет): " + description);
 
-                while (!tunnel.offer(c)){
+                while (!bandwidth.offer(c)){
                     Thread.sleep(10);
                 }
 
@@ -30,7 +27,7 @@ public class Tunnel extends Stage {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                tunnel.take();
+                bandwidth.take();
                 System.out.println(c.getName() + " закончил этап: " + description);
             }
         } catch (Exception e) {
