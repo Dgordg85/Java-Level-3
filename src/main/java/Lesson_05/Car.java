@@ -1,16 +1,19 @@
 package Lesson_05;
 
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CountDownLatch;
 
 public class Car implements Runnable {
     private static int CARS_COUNT;
-    private static ArrayBlockingQueue<Car> readyCars;
     private static ArrayBlockingQueue<Car> winner;
+    private static CountDownLatch unReadyCars;
+    private static CountDownLatch notFinishCars;
 
     static {
         CARS_COUNT = 0;
-        readyCars = new ArrayBlockingQueue<>(MainClass.CARS_COUNT);
         winner = new ArrayBlockingQueue<>(1);
+        unReadyCars = new CountDownLatch(MainClass.CARS_COUNT);
+        notFinishCars = new CountDownLatch(MainClass.CARS_COUNT);
     }
 
     private Race race;
@@ -28,20 +31,26 @@ public class Car implements Runnable {
         try {
             System.out.println(this.name + " готовится");
             Thread.sleep(500 + (int)(Math.random() * 800));
+            unReadyCars.countDown();
             System.out.println(this.name + " готов");
-            readyCars.add(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        while (getReadyCars() != MainClass.CARS_COUNT){}
 
+        try {
+            unReadyCars.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < race.getStages().size(); i++) {
             race.getStages().get(i).go(this);
         }
+
         if (winner.offer(this)){
             System.out.println(this.getName() + " - WIN");
         }
+        notFinishCars.countDown();
     }
 
     public String getName() {
@@ -51,7 +60,11 @@ public class Car implements Runnable {
         return speed;
     }
 
-    public static int getReadyCars() {
-        return readyCars.size();
+    public static CountDownLatch getUnReadyCars() {
+        return unReadyCars;
+    }
+
+    public static CountDownLatch getNotFinishCars() {
+        return notFinishCars;
     }
 }

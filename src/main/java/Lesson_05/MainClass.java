@@ -21,19 +21,19 @@ public class MainClass {
             threads.add(new Thread(cars[i]));
             threads.get(i).start();
         }
-        do{
-        } while (Car.getReadyCars() != CARS_COUNT);
 
+        try {
+            Car.getUnReadyCars().await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
 
-        for(Thread th : threads){
-            try {
-                th.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            Car.getNotFinishCars().await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
         System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
     }
 }
