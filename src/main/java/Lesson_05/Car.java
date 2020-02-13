@@ -5,10 +5,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class Car implements Runnable {
     private static int CARS_COUNT;
     private static ArrayBlockingQueue<Car> readyCars;
+    private static ArrayBlockingQueue<Car> winner;
 
     static {
         CARS_COUNT = 0;
         readyCars = new ArrayBlockingQueue<>(MainClass.CARS_COUNT);
+        winner = new ArrayBlockingQueue<>(1);
     }
 
     private Race race;
@@ -36,6 +38,9 @@ public class Car implements Runnable {
 
         for (int i = 0; i < race.getStages().size(); i++) {
             race.getStages().get(i).go(this);
+        }
+        if (winner.offer(this)){
+            System.out.println(this.getName() + " - WIN");
         }
     }
 
