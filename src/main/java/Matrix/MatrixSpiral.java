@@ -17,40 +17,46 @@ public class MatrixSpiral {
     }
 
     public static void main(String[] args) {
-        MatrixSpiral matrix = new MatrixSpiral(3);
-        matrix.fillArr(1, 1);
-        matrix.print();
+        MatrixSpiral matrix = new MatrixSpiral(5);
+        matrix.fillArr(0, 0);
     }
 
     public void print(){
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array.length; j++) {
-                System.out.print(array[i][j] + " ");
+                System.out.print(String.format("%3d", array[i][j]));
             }
             System.out.println();
         }
     }
 
     private void fillArr(int beginX, int beginY){
+        if (isBeginnigCordUnValide(beginX, beginY)){
+            System.out.println("Не верные координаты: диапазон от 0 до " + (array.length - 1));
+            return;
+        }
+
         coords[0][0] = beginX;
         coords[0][1] = beginY;
+
         for (int i = 1; i <= array.length * array.length; i++) {
             if (countChangingArrows == 4) break;
             int x = coords[0][0];
             int y = coords[0][1];
-            //System.out.println("iter=" + i + " x=" + x + " y=" + y + " curArr=" + currentArrow);
-            if (i == 17) print();
             array[x][y] = i;
             getNextCoords();
-
         }
+
+        print();
     }
 
     private void getNextCoords(){
         int x = coords[0][0];
         int y = coords[0][1];
+
         int nextArrowX = arrows[currentArrow][0];
         int nextArrowY = arrows[currentArrow][1];
+
         int nextX = x + nextArrowX;
         int nextY = y + nextArrowY;
 
@@ -66,15 +72,18 @@ public class MatrixSpiral {
 
     private void changeArrow(){
         countChangingArrows++;
+
         if (++currentArrow == arrows.length)
             currentArrow = 0;
     }
 
     private boolean isCordOutOfBoundary(int value){
         boolean result = false;
+
         if (value == array.length || value < 0){
             result = true;
         }
+
         return result;
     }
 
@@ -82,5 +91,14 @@ public class MatrixSpiral {
         return array[x][y] != 0;
     }
 
+    private boolean isBeginnigCordUnValide(int beginX, int beginY){
+        boolean result = false;
+        int maxValidSize = array.length - 1;
 
+        if (beginX > maxValidSize || beginY > maxValidSize || beginX < 0 || beginY < 0){
+            result = true;
+        }
+
+        return result;
+    }
 }
