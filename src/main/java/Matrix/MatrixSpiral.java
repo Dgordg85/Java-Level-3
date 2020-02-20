@@ -40,7 +40,7 @@ public class MatrixSpiral {
         coords[0][1] = beginY;
 
         for (int i = 1; i <= array.length * array.length; i++) {
-            if (countChangingArrows == 4) break;
+            if (countChangingArrows == arrows.length) break;
             int x = coords[0][0];
             int y = coords[0][1];
             array[x][y] = i;
@@ -62,7 +62,7 @@ public class MatrixSpiral {
 
         if (isCordOutOfBoundary(nextX) || isCordOutOfBoundary(nextY) || isCellFull(nextX, nextY)){
             changeArrow();
-            if (countChangingArrows != 4) getNextCoords();
+            if (countChangingArrows != arrows.length) getNextCoords();
         } else {
             countChangingArrows = 0;
             coords[0][0] = nextX;
