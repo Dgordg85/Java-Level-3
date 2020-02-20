@@ -31,7 +31,7 @@ public class MatrixSpiral {
     }
 
     private void fillArr(int beginX, int beginY){
-        if (isBeginnigCordUnValide(beginX, beginY)){
+        if (isBeginningCordUnValid(beginX, beginY)){
             System.out.println("Не верные координаты: диапазон от 0 до " + (array.length - 1));
             return;
         }
@@ -91,7 +91,7 @@ public class MatrixSpiral {
         return array[x][y] != 0;
     }
 
-    private boolean isBeginnigCordUnValide(int beginX, int beginY){
+    private boolean isBeginningCordUnValid(int beginX, int beginY){
         boolean result = false;
         int maxValidSize = array.length - 1;
 
